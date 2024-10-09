@@ -354,12 +354,17 @@ export async function signApp (_opts: SignOptions) {
       }
     } else {
       debugLog(
-        'Finding `Developer ID Application` certificate for distribution outside the Mac App Store...'
+        'Finding `Developer ID Application or Apple Development` certificate for distribution outside the Mac App Store...'
       );
-      identities = await findIdentities(
+      const developerIDIdentities = await findIdentities(
         validatedOpts.keychain || null,
         'Developer ID Application:'
       );
+      const appleDevelopmentIdentities = await findIdentities(
+        validatedOpts.keychain || null,
+        'Apple Development:'
+      );
+      identities = [...new Set([...developerIDIdentities, ...appleDevelopmentIdentities])];
     }
   }
 
